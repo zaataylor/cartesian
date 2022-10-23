@@ -84,7 +84,7 @@ func (c *CrossProduct) String() string {
 	}
 
 	// add results to the string
-	s := "[ "
+	s := "[ \n"
 	if c.printIndicesOnly {
 		// print indices into each set in cross product
 		for i, r := range c.results {

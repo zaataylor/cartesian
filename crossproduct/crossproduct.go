@@ -12,13 +12,13 @@ type CrossProduct struct {
 	max              int
 	length           int
 	j                int
-	slices           []interface{}
+	slices           []any
 	data             []int
 	moduli           []int
 	results          [][]int
 }
 
-func NewCrossProduct(inputSlices []interface{}) *CrossProduct {
+func NewCrossProduct(inputSlices []any) *CrossProduct {
 	c := CrossProduct{
 		printIndicesOnly: false,
 		count:            0,
@@ -37,7 +37,7 @@ func NewCrossProduct(inputSlices []interface{}) *CrossProduct {
 	return &c
 }
 
-func (c *CrossProduct) Next() []int {
+func (c *CrossProduct) NextIndices() []int {
 	if c.count == 0 {
 		c.count += 1
 		tmp := make([]int, c.length)
@@ -69,22 +69,44 @@ func (c *CrossProduct) Next() []int {
 	return nil
 }
 
-func (c *CrossProduct) Compute() [][]int {
-	cpResult := c.Next()
+func (c *CrossProduct) Next() []any {
+	indices := c.NextIndices()
+	if indices == nil {
+		return nil
+	}
+	res := make([]any, 0, len(indices))
+	for i, sl := range c.slices {
+		slice := reflect.ValueOf(sl)
+		v := slice.Index(indices[i]).Interface()
+		res = append(res, v)
+	}
+	return res
+}
+
+func (c *CrossProduct) Values() []any {
+	values := []any{}
+	v := c.Next()
+	for v != nil {
+		values = append(values, v)
+		v = c.Next()
+	}
+	return values
+}
+
+func (c *CrossProduct) Indices() [][]int {
+	cpResult := c.NextIndices()
 	for cpResult != nil {
-		cpResult = c.Next()
+		cpResult = c.NextIndices()
 	}
 	return c.results
 }
 
 func (c *CrossProduct) String() string {
 	// compute remaining results
-	for c.count < c.max {
-		c.Next()
-	}
+	c.Indices()
 
 	// add results to the string
-	s := "[ \n"
+	s := "[\n"
 	if c.printIndicesOnly {
 		// print indices into each set in cross product
 		for i, r := range c.results {
@@ -107,6 +129,6 @@ func (c *CrossProduct) String() string {
 		}
 
 	}
-	s += " ]\n"
+	s += "]\n"
 	return s
 }

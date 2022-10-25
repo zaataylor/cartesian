@@ -1,4 +1,4 @@
-module github.com/zaataylor/crossproduct
+module github.com/zaataylor/cartesian
 
 go 1.18
 

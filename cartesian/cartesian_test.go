@@ -1,6 +1,7 @@
-package crossproduct
+package cartesian
 
 import (
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,7 +12,7 @@ type Job struct {
 	id   int
 }
 
-func TestCorrectCrossProduct(t *testing.T) {
+func TestCorrectCartesianProduct(t *testing.T) {
 	sliceInts := []int{1, 8}
 	sliceBools := []bool{true, false}
 	sliceStrings := []string{"testing", "more", "things"}
@@ -28,9 +29,9 @@ func TestCorrectCrossProduct(t *testing.T) {
 		job2,
 	}
 
-	// Construct Cross Product from these slices
+	// Construct Cartesian product from these slices
 	intsAndBools := []any{sliceInts, sliceBools}
-	cp := NewCrossProduct(intsAndBools)
+	cp := NewCartesianProduct(intsAndBools)
 	actual := cp.Values()
 	expected := []any{
 		[]any{1, true},
@@ -40,9 +41,9 @@ func TestCorrectCrossProduct(t *testing.T) {
 	}
 	assert.Equal(t, expected, actual)
 
-	// Construct Cross Product from these other slices
+	// Construct Cartesian product from these other slices
 	intsAndJobs := []any{sliceInts, sliceJobs}
-	anotherCP := NewCrossProduct(intsAndJobs)
+	anotherCP := NewCartesianProduct(intsAndJobs)
 	actual = anotherCP.Values()
 	expected = []any{
 		[]any{1, job1},
@@ -52,9 +53,9 @@ func TestCorrectCrossProduct(t *testing.T) {
 	}
 	assert.Equal(t, expected, actual)
 
-	// Construct another Cross Product
+	// Construct another Cartesian product
 	boolsAndStrings := []any{sliceBools, sliceStrings}
-	yetAnotherCP := NewCrossProduct(boolsAndStrings)
+	yetAnotherCP := NewCartesianProduct(boolsAndStrings)
 	actual = yetAnotherCP.Values()
 	expected = []any{
 		[]any{true, "testing"},
@@ -68,7 +69,7 @@ func TestCorrectCrossProduct(t *testing.T) {
 
 	// Construct another one!
 	jobsAndStringsAndInts := []any{sliceJobs, sliceStrings, sliceInts}
-	oneMoreCP := NewCrossProduct(jobsAndStringsAndInts)
+	oneMoreCP := NewCartesianProduct(jobsAndStringsAndInts)
 	actual = oneMoreCP.Values()
 	expected = []any{
 		[]any{job1, "testing", 1},
@@ -85,4 +86,29 @@ func TestCorrectCrossProduct(t *testing.T) {
 		[]any{job2, "things", 8},
 	}
 	assert.Equal(t, expected, actual)
+}
+
+func TestHasNext(t *testing.T) {
+	sliceInts := []int{1, 8}
+	sliceBools := []bool{true, false}
+	slices := []any{sliceInts, sliceBools}
+	cp := NewCartesianProduct(slices)
+	// Cartesian product should have four elements, so
+	// after 4 iterations, there shouldn't be anything
+	// else left
+	expectedNumIterations := 4
+	i := 0
+	for i < expectedNumIterations {
+		cp.Next()
+		i += 1
+	}
+	assert.False(t, cp.HasNext())
+
+	for _, v := range cp.Values() {
+		log.Printf("Element is: %v\n", v)
+	}
+
+	log.Printf("Values are: %v", cp)
+	cp.printIndicesOnly = true
+	log.Printf("Indices are: %v", cp)
 }

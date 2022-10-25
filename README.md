@@ -65,7 +65,7 @@ Cartesian product of slices:
 The sections below illustrate how to use `cartesian` effectively.
 
 ## Creating the `CartesianProduct`
-Put the slices you want to compute the cartesian of inside of an `[]any`-type slice. Then, provide this slice as input to `NewCartesianProduct()`. For exampmle:
+Put the slices you want to compute the cartesian of inside of an `[]any`-type slice. Then, provide this slice as input to `NewCartesianProduct()`. For example:
 ```golang
 sliceA := []int{4, 5, 8}
 sliceB := []bool{true, false}

@@ -13,7 +13,7 @@ type CartesianProduct struct {
 	count            int
 	max              int
 	length           int
-	j                int
+	shiftIndex       int
 	slices           []any
 	data             []int
 	moduli           []int
@@ -25,7 +25,7 @@ func NewCartesianProduct(inputSlices []any) *CartesianProduct {
 	c := CartesianProduct{
 		printIndicesOnly: false,
 		count:            0,
-		j:                1,
+		shiftIndex:       1,
 		max:              1,
 		slices:           inputSlices,
 		length:           len(inputSlices),
@@ -53,16 +53,16 @@ func (c *CartesianProduct) computeCartesianProduct() {
 		}
 		if c.count < c.max {
 			// increment by "1", then take modulus
-			v := (c.data[c.length-c.j] + 1) % c.moduli[c.length-c.j]
-			c.data[c.length-c.j] = v
+			v := (c.data[c.length-c.shiftIndex] + 1) % c.moduli[c.length-c.shiftIndex]
+			c.data[c.length-c.shiftIndex] = v
 			// carry the "1" if v is 0
 			if v == 0 {
-				for v == 0 && c.length-c.j > 0 {
+				for v == 0 && c.length-c.shiftIndex > 0 {
 					// shift down 1 (i.e. one to the left)
-					c.j += 1
+					c.shiftIndex += 1
 					// increment by "1", then take modulus
-					v = (c.data[c.length-c.j] + 1) % c.moduli[c.length-c.j]
-					c.data[c.length-c.j] = v
+					v = (c.data[c.length-c.shiftIndex] + 1) % c.moduli[c.length-c.shiftIndex]
+					c.data[c.length-c.shiftIndex] = v
 				}
 			}
 			tmp := make([]int, c.length)
@@ -70,7 +70,7 @@ func (c *CartesianProduct) computeCartesianProduct() {
 			c.indices = append(c.indices, tmp)
 			c.values = append(c.values, c.getValues(c.indices[c.count]))
 			c.count += 1
-			c.j = 1
+			c.shiftIndex = 1
 		}
 	}
 }

@@ -109,6 +109,9 @@ func TestCartesianProductIterator(t *testing.T) {
 	}
 	assert.False(t, cpi.HasNext())
 
+	cpi.ResetIterator()
+	assert.True(t, cpi.HasNext())
+
 	for _, v := range cp.Values() {
 		log.Printf("Element is: %v\n", v)
 	}

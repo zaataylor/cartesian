@@ -75,24 +75,33 @@ cp := cartesian.NewCartesianProduct(input)
 ```
 
 ## Iterating over `CartesianProduct` Elements
-Use `HasNext()` as an indicator of when to continue iterating, and `Next()` to return the iterands themselves. For example:
+First, use `Iterator()` to create a `CartesianProductIterator`. Then, use the iterator's `HasNext()` method as an indicator of when to continue iterating, and `Next()` to return the iterands themselves. For example:
 ```golang
 // Construct the Cartesian product
 sliceA := []int{4, 5, 8}
 sliceB := []bool{true, false}
 input := []any{sliceA, sliceB}
-
 cp := cartesian.NewCartesianProduct(input)
 
+// Construct the Cartesian Product iterator
+cpi := cp.Iterator()
+
+
 // Iterate over its elements and print them out
-for cp.HasNext() {
-    element := cp.Next()
+for cpi.HasNext() {
+    element := cpi.Next()
     fmt.Printf("Element is: %v\n", element)
 }
+
+// Reset the iterator, if you'd like...
+cpi.ResetIterator()
+
+// ...or, create a new iterator
+newCpi := cp.Iterator()
 ```
 
 ## Computing the full Cartesian product
-You can use `Values()` to compute and return the entire Cartesian product at once. Example:
+When you first call `NewCartesianProduct()`, it computes the full Cartesian Product as part of its initialization process. You can then use `Values()` to print or iterate over the elements of the product. Example:
 ```golang
 // Construct the Cartesian product
 sliceA := []int{4, 5, 8}
@@ -104,5 +113,8 @@ cp := cartesian.NewCartesianProduct(input)
 // Iterate over its elements and print them out
 for _, v := range cp.Values() {
     fmt.Printf("Element is: %#v\n", v)
+	// Assign values to individual variables
+	firstValue, secondValue := v[0], v[1]
+	fmt.Printf("First item: %v; Second item: %v", firstValue, secondValue)
 }
 ```

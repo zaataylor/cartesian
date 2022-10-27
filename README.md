@@ -1,3 +1,7 @@
+<a href="https://project-types.github.io/#club">
+	<img src="https://img.shields.io/badge/project%20type-club-ff69b4" alt="Club Badge">
+</a>
+
 # Description
 
 `cartesian` is a Go package that makes it easy to compute and return the [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) of an arbitrary number of arbitrarily typed slices.

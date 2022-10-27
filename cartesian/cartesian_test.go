@@ -1,6 +1,7 @@
 package cartesian
 
 import (
+	"fmt"
 	"log"
 	"testing"
 
@@ -88,21 +89,25 @@ func TestCorrectCartesianProduct(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestHasNext(t *testing.T) {
+func TestCartesianProductIterator(t *testing.T) {
 	sliceInts := []int{1, 8}
 	sliceBools := []bool{true, false}
 	slices := []any{sliceInts, sliceBools}
 	cp := NewCartesianProduct(slices)
+	cpi := cp.Iterator()
 	// Cartesian product should have four elements, so
 	// after 4 iterations, there shouldn't be anything
 	// else left
 	expectedNumIterations := 4
 	i := 0
 	for i < expectedNumIterations {
-		cp.Next()
+		v := cpi.Next()
+		fmt.Printf("Value is: %#v\n", v)
+		a, b := v[0], v[1]
+		fmt.Printf("a is %v, b is %v\n", a, b)
 		i += 1
 	}
-	assert.False(t, cp.HasNext())
+	assert.False(t, cpi.HasNext())
 
 	for _, v := range cp.Values() {
 		log.Printf("Element is: %v\n", v)

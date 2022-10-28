@@ -4,7 +4,7 @@
 
 # Description
 
-`cartesian` is a Go package that makes it easy to compute and return the [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) of an arbitrary number of arbitrarily typed slices.
+`cartesian` is a Go package that makes it easy to compute and return the [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) of an arbitrary number of slices of varying types.
 
 # Requires
 - Go 1.18 or higher
@@ -104,7 +104,7 @@ cpi.ResetIterator()
 newCpi := cp.Iterator()
 ```
 
-## Computing the full Cartesian product
+## Computing the full Cartesian product and using `Values()`
 When you first call `NewCartesianProduct()`, it computes the full Cartesian Product as part of its initialization process. You can then use `Values()` to print or iterate over the elements of the product. Example:
 ```golang
 // Construct the Cartesian product
@@ -121,4 +121,45 @@ for _, v := range cp.Values() {
 	firstValue, secondValue := v[0], v[1]
 	fmt.Printf("First item: %v; Second item: %v", firstValue, secondValue)
 }
+```
+
+## When to `Indices()` instead of `Values()`
+There are times when you might want/need to obtain the indices into each of the passed-in slices, then directly index into each slice yourself to obtain the values corresponding to an element of the Cartesian product. In this case, it's best to use `Indices()`, as it will return a slice of `int`s where each element is an index into a specific slice. For example, we can use this to compute Cartesian products with slices of functions, then apply other args from the product to those functions:
+```golang
+// Is is stonks???
+func isStonksFunc(isStonks bool, company string) string {
+	if isStonks {
+		return fmt.Sprintf("%s is stonks! 👍", company)
+	} else {
+		return fmt.Sprintf("%s is NOT stonks! 👎", company)
+	}
+}
+
+func isOneFunc(isOne bool, _ string) string {
+	if isOne {
+		return "isOne"
+	}
+	return "isZero"
+}
+
+func main() {
+	sliceS := []string{"MSFT", "GOOG", "META"}
+	// Function slice
+	sliceF := make([]func(bool, string) string, 0)
+	sliceF = append(sliceF, isStonksFunc)
+	sliceF = append(sliceF, isOneFunc)
+	
+	// Construct Cartesian product
+	anotherInput := []any{sliceF, sliceB, sliceS}
+	cp := cartesian.NewCartesianProduct(anotherInput)
+
+	// Iterate over indices, use these to obtain a specific Cartesian product
+	// Then, split the product into a function and two args, and apply those
+	// args to the function
+	for _, indexes := range cp.Indices() {
+		fn, boolArg, stringArg := sliceF[indexes[0]], sliceB[indexes[1]], sliceS[indexes[2]]
+		fmt.Printf("Function: %v, boolArg: %v, stringArg: %v --> Result: %v\n", cartesian.GetFunctionName(fn), boolArg, stringArg, fn(boolArg, stringArg))
+	}
+}
+
 ```

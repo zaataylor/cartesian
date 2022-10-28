@@ -4,8 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"runtime"
 	"strings"
 )
+
+// Thank you, StackOverflow :)
+// https://stackoverflow.com/a/7053871
+func GetFunctionName(i interface{}) string {
+	return runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
+}
 
 // Cartesian Product
 type CartesianProduct struct {
@@ -18,7 +25,7 @@ type CartesianProduct struct {
 	data             []int
 	moduli           []int
 	indices          [][]int
-	values           []any
+	values           [][]any
 }
 
 func NewCartesianProduct(inputSlices []any) *CartesianProduct {
@@ -85,7 +92,7 @@ func (c *CartesianProduct) getValues(indices []int) []any {
 	return res
 }
 
-func (c *CartesianProduct) Values() []any {
+func (c *CartesianProduct) Values() [][]any {
 	return c.values
 }
 

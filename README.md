@@ -4,6 +4,8 @@
 
 # Table of Contents
 - [Description](#description)
+	- [What is the Cartesian Product?](#what-is-the-cartesian-product)
+	- [What is `cartesian`?](#what-is-cartesian)
 - [Requires](#requires)
 - [Example](#example)
 - [Using `cartesian`](#using-cartesian)
@@ -14,7 +16,27 @@
 
 # Description
 
-`cartesian` is a Go package that makes it easy to compute and return the [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) of an arbitrary number of slices of varying types.
+## What is the Cartesian Product?
+Given two sets of "things", `A` and `B`, the [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) is the set of all possible pairs `(a, b)` where `a` is a thing from set `A` and `b` is a thing from set `B`. A real life example: let's say you have 3 shirts and 2 pairs of pants. What possible outfits can you create?
+
+Call the set of shirts `S`. Then, `S = {shirt-1, shirt-2, shirt-3}`.
+Call the set of pants `P`. Then `P = {pants-1, pants-2}`.
+How many ways can we combine these items into an outfit (i.e. a shirt and pants)? Let's represent the possibilities as pairs of `(s, p)`, where `s` is in `S` and `p` is in `P`. Then we have:
+
+```
+(shirt-1, pants-1)
+(shirt-2, pants-1)
+(shirt-3, pants-1)
+(shirt-1, pants-2)
+(shirt-2, pants-2)
+(shirt-3, pants-2)
+```
+
+This collection of ordered pairs is the Cartesian product of `S` and `P`.
+
+## What is `cartesian`?
+
+`cartesian` is a Go package that makes it easy to compute and return the Cartesian product of an arbitrary number of slices of varying types. 
 
 # Requires
 - Go 1.18 or higher

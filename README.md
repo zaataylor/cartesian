@@ -125,8 +125,8 @@ cpi := cp.Iterator()
 
 // Iterate over its values and print them out
 for cpi.HasNext() {
-    element := cpi.Next()
-    fmt.Printf("Element is: %v\n", element)
+	value := cpi.Next()
+	fmt.Printf("Value is: %v\n", element)
 }
 
 // Reset the iterator, if you'd like...

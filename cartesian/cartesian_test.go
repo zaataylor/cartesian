@@ -34,11 +34,11 @@ func TestCorrectCartesianProduct(t *testing.T) {
 	intsAndBools := []any{sliceInts, sliceBools}
 	cp := NewCartesianProduct(intsAndBools)
 	actual := cp.Values()
-	expected := []any{
-		[]any{1, true},
-		[]any{1, false},
-		[]any{8, true},
-		[]any{8, false},
+	expected := [][]any{
+		{1, true},
+		{1, false},
+		{8, true},
+		{8, false},
 	}
 	assert.Equal(t, expected, actual)
 
@@ -46,11 +46,11 @@ func TestCorrectCartesianProduct(t *testing.T) {
 	intsAndJobs := []any{sliceInts, sliceJobs}
 	anotherCP := NewCartesianProduct(intsAndJobs)
 	actual = anotherCP.Values()
-	expected = []any{
-		[]any{1, job1},
-		[]any{1, job2},
-		[]any{8, job1},
-		[]any{8, job2},
+	expected = [][]any{
+		{1, job1},
+		{1, job2},
+		{8, job1},
+		{8, job2},
 	}
 	assert.Equal(t, expected, actual)
 
@@ -58,13 +58,13 @@ func TestCorrectCartesianProduct(t *testing.T) {
 	boolsAndStrings := []any{sliceBools, sliceStrings}
 	yetAnotherCP := NewCartesianProduct(boolsAndStrings)
 	actual = yetAnotherCP.Values()
-	expected = []any{
-		[]any{true, "testing"},
-		[]any{true, "more"},
-		[]any{true, "things"},
-		[]any{false, "testing"},
-		[]any{false, "more"},
-		[]any{false, "things"},
+	expected = [][]any{
+		{true, "testing"},
+		{true, "more"},
+		{true, "things"},
+		{false, "testing"},
+		{false, "more"},
+		{false, "things"},
 	}
 	assert.Equal(t, expected, actual)
 
@@ -72,19 +72,19 @@ func TestCorrectCartesianProduct(t *testing.T) {
 	jobsAndStringsAndInts := []any{sliceJobs, sliceStrings, sliceInts}
 	oneMoreCP := NewCartesianProduct(jobsAndStringsAndInts)
 	actual = oneMoreCP.Values()
-	expected = []any{
-		[]any{job1, "testing", 1},
-		[]any{job1, "testing", 8},
-		[]any{job1, "more", 1},
-		[]any{job1, "more", 8},
-		[]any{job1, "things", 1},
-		[]any{job1, "things", 8},
-		[]any{job2, "testing", 1},
-		[]any{job2, "testing", 8},
-		[]any{job2, "more", 1},
-		[]any{job2, "more", 8},
-		[]any{job2, "things", 1},
-		[]any{job2, "things", 8},
+	expected = [][]any{
+		{job1, "testing", 1},
+		{job1, "testing", 8},
+		{job1, "more", 1},
+		{job1, "more", 8},
+		{job1, "things", 1},
+		{job1, "things", 8},
+		{job2, "testing", 1},
+		{job2, "testing", 8},
+		{job2, "more", 1},
+		{job2, "more", 8},
+		{job2, "things", 1},
+		{job2, "things", 8},
 	}
 	assert.Equal(t, expected, actual)
 }

@@ -126,13 +126,12 @@ for _, v := range cp.Values() {
 ## When to `Indices()` instead of `Values()`
 There are times when you might want/need to obtain the indices into each of the passed-in slices, then directly index into each slice yourself to obtain the values corresponding to an element of the Cartesian product. In this case, it's best to use `Indices()`, as it will return a slice of `int`s where each element is an index into a specific slice. For example, we can use this to compute Cartesian products with slices of functions, then apply other args from the product to those functions:
 ```golang
-// Is is stonks???
+// Is it stonks???
 func isStonksFunc(isStonks bool, company string) string {
 	if isStonks {
 		return fmt.Sprintf("%s is stonks! 👍", company)
-	} else {
-		return fmt.Sprintf("%s is NOT stonks! 👎", company)
 	}
+	return fmt.Sprintf("%s is NOT stonks! 👎", company)
 }
 
 func isOneFunc(isOne bool, _ string) string {
@@ -143,6 +142,7 @@ func isOneFunc(isOne bool, _ string) string {
 }
 
 func main() {
+	sliceB := []bool{true, false}
 	sliceS := []string{"MSFT", "GOOG", "META"}
 	// Function slice
 	sliceF := make([]func(bool, string) string, 0)
@@ -153,12 +153,13 @@ func main() {
 	anotherInput := []any{sliceF, sliceB, sliceS}
 	cp := cartesian.NewCartesianProduct(anotherInput)
 
-	// Iterate over indices, use these to obtain a specific Cartesian product
+	// Explnation: Iterate over indices, and use them to obtain a specific
+	// Cartesian product by indexing into each slice one by one.
 	// Then, split the product into a function and two args, and apply those
-	// args to the function
+	// args to the function, printing out the result.
 	for _, indexes := range cp.Indices() {
 		fn, boolArg, stringArg := sliceF[indexes[0]], sliceB[indexes[1]], sliceS[indexes[2]]
-		fmt.Printf("Function: %v, boolArg: %v, stringArg: %v --> Result: %v\n", cartesian.GetFunctionName(fn), boolArg, stringArg, fn(boolArg, stringArg))
+		fmt.Printf("Function Name: %v, boolArg: %v, stringArg: %v --> Result: %v\n", cartesian.GetFunctionName(fn), boolArg, stringArg, fn(boolArg, stringArg))
 	}
 }
 
